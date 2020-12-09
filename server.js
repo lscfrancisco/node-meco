@@ -18,7 +18,7 @@ router.post('/prueba-pago', function( request, response ){
 
   const pago = {
     stripetoken: request.body.stripetoken,
-    amount: request.body.amount
+    amount: request.body.amount || 15000
   };
 
   var charge =  stripe.paymentIntents.create({

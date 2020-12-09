@@ -53,11 +53,26 @@ router.post('/crear', ( request, response ) => {
 
   console.log( pago );
 
-  response.json({
+  var charge =  stripe.paymentIntents.create({
+    amount: pago.amount,
+    currency: 'mxn',
+    description: 'sample transaction',
+    source: pago.stripetoken
+  }, function (err, charge){
+    if( err )
+      console.log( err )
+    else 
+   // response.send({ succes: true });
+
+   response.json({
     ok: true,
     mensaje: 'todo funciona bien',
     pago
   });
+  
+  })
+
+ 
 
 });
 

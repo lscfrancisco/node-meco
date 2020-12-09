@@ -12,7 +12,8 @@ const router = express.Router();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(cors());
+//CORS
+app.use( cors ({ origin: true, credentials: true }));
 
 router.post('/prueba-pago', function( request, response ){
 

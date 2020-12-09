@@ -48,7 +48,7 @@ router.post('/crear', ( request, response ) => {
   
   const pago = {
     stripetoken: request.body.stripetoken,
-    amount: request.body.amount
+    amount: request.body.amount||15000
   };
 
   console.log( pago );

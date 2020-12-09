@@ -4,10 +4,31 @@ const stripe = require("stripe")("sk_test_51HuLPVDfFvubV9xFlystLORpY6vqWp4a7qup5
 const express= require("express");
 const bodyParser = require('body-parser');
 
-const cors = require('cors');
-
 const app = express();
 const router = express.Router();
+const cors = require('cors');
+
+const allowedOrigins = [
+  'capacitor://localhost',
+  'ionic://localhost',
+  'http://localhost',
+  'http://localhost:8080',
+  'http://localhost:8100'
+];
+
+// Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin not allowed by CORS'));
+    }
+  }
+}
+
+// Enable preflight requests for all routes
+app.options('*', cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -40,12 +61,13 @@ router.get('/prueba', ( request, response ) => {
   
   response.json({
     ok: true,
-    mensaje: 'todo funciona bien'
+    mensaje: 'todo funciona bien',
+    corsPer: allowedOrigins
   });
 
 });
 
-router.post('/crear', ( request, response ) => {
+router.post('/crear', cors(corsOptions), ( request, response ) => {
   
   const pago = {
     stripetoken: request.body.stripetoken,
